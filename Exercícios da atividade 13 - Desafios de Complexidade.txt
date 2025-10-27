@@ -1,0 +1,245 @@
+Exercícios da atividade 13 - Desafios de complexidade
+
+Desafio 1
+
+Algoritmo "registro do primeiro nome":
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    string nome;
+    
+    getline (cin, nome);
+    cout << "Primeiro cliente da fila: " << nome;
+
+    return 0;
+}
+
+
+O tempo de execução do algoritmo não é alterado quando o número de pessoas na fila cresce de 10 para 10000, pois o número de operações realizadas é constante. Esse algoritmo possui complexidade O(1), pois ele possui um número fixo de instruções e, por notação Big O, o tempo será constante.
+
+
+Desafio 2
+
+Algoritmo "registro de clientes de uma fila com n pessoas":
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main(){
+    string nome;
+    int n = 0, i = 0;
+    
+    cout << "Número de clientes na fila: ";
+    cin >> n;
+    cin.get();
+    
+    vector <string> clientes; 
+    clientes.resize (n);
+    
+    
+    for (i = 0; i < n; i++){
+        getline (cin, nome);
+        clientes [i] = nome;
+    }
+    
+    for (i = 0; i < n; i++){
+        cout << clientes [i] << endl;
+    }
+    
+    return 0;
+}
+
+
+O tempo de execução do algoritmo seria, aproximadamente, de 50 segundos. Esse valor é resultado da variação linear do tempo de execução de um algoritmo de complexidade O(n). Há uma razão constante entre cada intervalo da reta que descreve essa complexidade.
+
+O gráfico que descreve o tempo de execução é y = 2x.
+
+
+Desafio 3
+
+Algoritmo "procurar um cliente no melhor ou pior caso":
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main(){
+    string nome;
+    int n = 0, i = 0, caso = 0;
+    bool opcao = 0;
+    
+    cout << "Número de clientes na fila: ";
+    cin >> n;
+    cin.get();
+    
+    vector <string> clientes; 
+    clientes.resize (n);
+    
+    cout << "Digite '0' para o melhor caso ou '1' para o pior caso: ";
+    cin >> opcao;
+    cin.get();
+    
+    if (opcao == 1){
+        caso = n - 1;
+    }
+    
+    for (i = 0; i < n; i++){
+        getline (cin, nome);
+        clientes [i] = nome;
+    }
+    
+    cout << "Cliente do caso escolhido" << clientes [caso] << endl;
+    
+    return 0;
+}
+
+
+A complexidade desse algoritmo é O(n), pois o tempo de execução cresce proporcionalmente com o tamanho da entrada em termos de itens a processar. Ou seja, quanto maior o número de iterações a serem feitas, maior o tempo de execução. Não importa se a lista de clientes já é pré-definida (iterações ocorrem para buscar o nome) ou definida no próprio algoritmo (iterações ocorrem para registrar os nomes).
+
+A notação Big O se concentra no pior caso devido à necessidade de contar o maior número de instruções que um algoritmo pode requerer para solucionar um problema, pois, dessa forma, é possível prever a memória necessária para executar o programa. 
+
+
+Desafio 4
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+bool busca_binaria(const vector<string>& dicionario, const string& palavra) {
+    int inferior = 0;
+    int superior = dicionario.size() - 1;
+    int divisoes = 0; 
+
+    cout << "\n--- Iniciando a Busca pela palavra '" << palavra << "' ---\n";
+
+    while (inferior <= superior) {
+        divisoes++;
+        int meio = inferior + (superior - inferior) / 2;
+        
+        cout << "Passo " << divisoes << ": Abrindo na página central (índice " << meio << "). Palavra vista: '" << dicionario[meio] << "'\n";
+
+        if (dicionario[meio] == palavra) {
+            cout << "\n>>> SUCESSO! A palavra foi encontrada na página " << meio + 1 << " após " << divisoes << " divisões.\n";
+            return true;
+        } else if (dicionario[meio] > palavra) {
+            cout << "   - A palavra procurada é MENOR. Buscando na primeira metade (páginas de " << inferior + 1 << " a " << meio << ").\n";
+            superior = meio - 1;
+        } 
+        else {
+            cout << "   - A palavra procurada é MAIOR. Buscando na segunda metade (páginas de " << meio + 2 << " a " << superior + 1 << ").\n";
+            inferior = meio + 1;
+        }
+    }
+
+    cout << "\n>>> FALHA! A palavra '" << palavra << "' não foi encontrada no dicionário. Total de divisões: " << divisoes << ".\n";
+    return false;
+}
+
+int main() {
+    vector<string> dicionario = {
+        "abacaxi", "banana", "cachorro", "dado", "elefante", "foguete", "girafa", "hamburguer",
+        "igreja", "jacare", "kiwi", "limao", "morango", "navio", "onibus", "pipoca"
+    };
+
+    string palavra = "foguete";
+    busca_binaria(dicionario, palavra);
+
+    return 0;
+}
+
+O número 10 representa o número máximo de divisões que o algoritmo de busca binária precisará realizar para encontrar (ou concluir que não existe) a palavra desejada em um dicionário de 1024 páginas.
+
+A principal vantagem de um algoritmo O(log N) é ter um tempo de execução bem menor para grandes volumes de dados, crescendo mais lentamente com o número de elementos.
+
+
+Desafio 5
+
+FUNÇÃO CriarConexoes(ListaDePessoas)
+    N = tamanho da ListaDePessoas
+    contador_conexoes = 0
+
+    PARA i DE 1 ATÉ N - 1 FAÇA
+        PARA j DE i + 1 ATÉ N FAÇA
+            Imprimir "Conexão de: " + ListaDePessoas[i] + " com " + ListaDePessoas[j]
+            contador_conexoes = contador_conexoes + 1
+        FIM PARA
+    FIM PARA
+
+    Imprimir "Total de Conexões: " + contador_conexoes
+FIM FUNÇÃO
+
+O total de conexões é dada pela combinação de "n" elementos tomados 2 a 2, logo "n = 5" resulta em "5(5 - 1)/2" que é 10 e "n = 10" resulta em "10(10 - 1)/2" que é 45.
+
+O tempo é chamado de quadrático, pois a quantidade de operações (conexões) é proporcional ao quadrado do número de elementos de entrada(o "n").
+
+Se o "n" dobrar de tamanho, o esforço, ou seja, o tempo de execução ou número de operações, será quadruplicado. 
+
+
+Desafio 6
+
+Ver o gráfico no arquivo anexo.
+
+Uma metáfora adequado ao caso de N = 1000 para o O (N2) é "espera infinita", pois o número de operações é tão grande que causa a impressão de congelamento do computador ao usuário já que este acaba perdendo a paciência esperando o processamento.  
+
+
+Desafio 7
+
+A primeira parte possui complexidade O (N), pois possui um único laço de repetição, o qual é executado N vezes. A segunda parte possui complexidade O (N2), pois possui dois laços aninhados que executam N vezes.
+
+Como N2 cresce muito mais rápido que N, a complexidade do trecho A é O (N2).
+
+O aninhamento de laços afeta drasticamente a complexidade do algoritmo, pois há um crescimento multiplicativo das operações, já que cada laço "interior" é executado N vezes dentro do "exterior". 
+
+
+Desafio 8
+
+total_comparacoes = 0
+
+PARA i DE 1 ATÉ N - 1 FAÇA
+    PARA j DE i + 1 ATÉ N FAÇA
+        total_comparacoes = total_comparacoes + 1     
+    FIM PARA
+FIM PARA
+
+A nova complexidade do algoritmo otimizado continua sendo O (N2), pois a notação Big O descreve o comportamento assintótico, ou seja, o quão rápido o algoritmo cresce à medida que N se aproxima do infinito, e ignora as constantes e os termos de menor ordem. Como o termo dominante ainda é N2, a ordem de crescimento é a mesma, ainda que o tempo tenha sido reduzido pela metade.
+
+A importância desse tipo de otimização reside na melhoria do fator constante, o qual reduz o tempo de execução real (no caso acima reduz pela metade) e, dessa forma, reduz os custos operacionais. Dessa forma, a experiência do usuário torna-se melhor.
+
+
+Desafio 9
+
+O primeiro bloco de código tem complexidade linear, pois executa um só laço N vezes. O segundo bloco de código, por sua vez, tem complexidade constante, pois executa uma única operação aritmética. Já o terceiro bloco de código tem complexidade quadrática, pois possui dois laços aninhados.
+
+Como na notação Big O a complexidade é sempre determinada pelo termo dominante, o resultado será que a complexidade da função é O (N2).
+
+O princípio da notação Big O é de prever o comportamento do algoritmo para entradas muito grandes, ou seja, quando N tende ao infinito. Nesse caso, o crescimento de custo total é ditado quase inteiramente pelo termo de maior ordem. Dessa forma, a complexidade da função é dominada pelo bloco 3, o qual possui a maior taxa de crescimento de custo.
+
+
+Desafio 10
+
+Inserir um novo elemento ao final de um array dinâmico, quando há espaço disponível, é considerado uma operação de tempo constante (O (1)) por três motivos:
+
+a) É um acesso direto, porque o array já tem espaço reservado imediatamente após o último elemento. 
+
+b) É uma operação única, já que é necessário apenas escrever o novo dado no índice seguinte e incrementar o contador de tamanho.
+
+c) "N" é independente, ou seja, a operação leva o mesmo tempo, qualquer que seja o tamanho atual do array.
+
+Quando o array dinâmico atinge sua capacidade máxima e há a tentativa de inserir um novo elemento, ocorre um processo de realocação forçada, tornando esta operação de pior caso uma operação de tempo linear, O(N). O processo ocorre em três etapas:
+
+a) O sistema aloca um novo bloco de memória, geralmente com o dobro da capacidade original (2N).
+
+b) Todos os elementos do array anterior são copiados para o novo. 
+
+c) Ocorre a inserção do novo elemento.
+
+Como há um proporcionalidade direta entre o número de elementos de N e o tempo gasto na cópia, o custo da operação única é O (N).
+
+A complexidade amortizada (ou custo amortizado) não analisa o pior caso de uma única operação, mas sim o custo médio de uma longa sequência de operações ao longo do tempo. Um exemplo desse conceito é justamente a inserção no final do array, pois a operação O (N) ocorre de forma rara, mas entre dois eventos O (N) há várias operações O (1) rápidas.
+
+O custo médio (amortizado) é a divisão entre o custo total (2N) pela quantidade de inserções (N + 1). Como o valor resultante aproximado é 2 e o Big O ignora as constantes, a complexidade amortizada resultante é O (1). Na prática, o desempenho geral é próximo de uma operação de tempo constante, com pequenos travamentos causados pela operação de complexidade O (N).
